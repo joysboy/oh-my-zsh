@@ -19,6 +19,7 @@ local pwd="%{$fg[cyan]%}%(!.%1~.%~)%{$reset_color%}"
 
 #PROMPT='%(!.%{$fg_bold[red]%}.%{$fg_bold[green]%}%n%{$reset_color%}@)%{$fg[red]%}%m %{$fg_bold[cyan]%}%(!.%1~.%~) $(git_prompt_info)%_$(prompt_char)%{$reset_color%} '
 <<<<<<< HEAD
+<<<<<<< HEAD
 PROMPT='${time} ${user}${host} ${pwd} $(git_prompt_info) 
 %{$fg[red]%}%_$(prompt_char) %{$reset_color%}'
 
@@ -31,12 +32,22 @@ ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE_PREFIX="%{$fg[green]%}↑"
 ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE_SUFFIX="%{$reset_color%}"
 =======
 PROMPT='${time} ${user}${host} ${pwd} $(git_prompt_info) %{$reset_color%}
+=======
+PROMPT='${time} ${user}${host} ${pwd} $(git_prompt_info) 
+>>>>>>> modify git info
 %{$fg[red]%}%_$(prompt_char) %{$reset_color%}'
 
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[blue]%}(%{$fg[red]%}"
-ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[yellow]%}✗%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_DIRTY=" %{$fg[yellow]%}*%{$reset_color%}"
 ZSH_THEME_GIT_PROMPT_CLEAN=""
+<<<<<<< HEAD
 >>>>>>> add my theme
+=======
+ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE_PREFIX="%{$fg[yellow]%}↓"
+ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE_SUFFIX="%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE_PREFIX="%{$fg[green]%}↑"
+ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE_SUFFIX="%{$reset_color%}"
+>>>>>>> modify git info
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$fg[blue]%}) %{$reset_color%}"
 
 # elaborate exitcode on the right when >0
