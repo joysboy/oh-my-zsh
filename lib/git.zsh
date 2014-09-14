@@ -22,14 +22,42 @@ parse_git_dirty() {
     else
         GIT_STATUS=$(command git status -s ${SUBMODULE_SYNTAX} 2> /dev/null | tail -n1)
     fi
-    if [[ -n $GIT_STATUS ]]; then
-      echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
-    else
-      echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
+    remote=${$(command git rev-parse --verify ${hook_com[branch]}@{upstream} --symbolic-full-name 2>/dev/null)/refs\/remotes\/}
+    if [[ -n ${remote} ]] ; then
+      ahead=$(command git rev-list ${hook_com[branch]}@{upstream}..HEAD 2>/dev/null | wc -l|gsed 's/\s*//')
+      behind=$(command git rev-list HEAD..${hook_com[branch]}@{upstream} 2>/dev/null | wc -l|gsed 's/\s*//')
+      if [[ -n $GIT_STATUS ]]; then
+        if [ $ahead -eq 0 ] && [ $behind -gt 0 ]
+        then
+          echo "$ZSH_THEME_GIT_PROMPT_DIRTY | $ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE_PREFIX$behind$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE_SUFFIX"
+        elif [ $ahead -gt 0 ] && [ $behind -eq 0 ]
+        then
+          echo "$ZSH_THEME_GIT_PROMPT_DIRTY | $ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE_PREFIX$ahead$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE_SUFFIX"
+        elif [ $ahead -gt 0 ] && [ $behind -gt 0 ]
+        then
+          echo "$ZSH_THEME_GIT_PROMPT_DIRTY | $ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE_PREFIX$ahead$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE_SUFFIX $ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE_PREFIX$behind$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE_SUFFIX"
+        else
+          echo "$ZSH_THEME_GIT_PROMPT_DIRTY"
+        fi
+      else
+        if [ $ahead -eq 0 ] && [ $behind -gt 0 ]
+        then
+          echo " $ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE_PREFIX$behind$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE_SUFFIX"
+        elif [ $ahead -gt 0 ] && [ $behind -eq 0 ]
+        then
+          echo " $ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE_PREFIX$ahead$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE_SUFFIX"
+        elif [ $ahead -gt 0 ] && [ $behind -gt 0 ]
+        then
+          echo " $ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE_PREFIX$ahead$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE_SUFFIX $ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE_PREFIX$behind$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE_SUFFIX"
+        else
+          echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
+        fi
+      fi
     fi
   else
     echo "$ZSH_THEME_GIT_PROMPT_CLEAN"
   fi
+
 }
 
 # get the difference between the local and remote branches
@@ -41,13 +69,13 @@ git_remote_status() {
 
         if [ $ahead -eq 0 ] && [ $behind -gt 0 ]
         then
-            echo "$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE"
+            echo "$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE_PREFIX$behind$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE_SUFFIX"
         elif [ $ahead -gt 0 ] && [ $behind -eq 0 ]
         then
-            echo "$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE"
+            echo "$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE_PREFIX$ahead$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE_SUFFIX"
         elif [ $ahead -gt 0 ] && [ $behind -gt 0 ]
         then
-            echo "$ZSH_THEME_GIT_PROMPT_DIVERGED_REMOTE"
+            echo "$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE_PREFIX$ahead$ZSH_THEME_GIT_PROMPT_AHEAD_REMOTE_SUFFIX $ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE_PREFIX$behind$ZSH_THEME_GIT_PROMPT_BEHIND_REMOTE_SUFFIX"
         fi
     fi
 }
